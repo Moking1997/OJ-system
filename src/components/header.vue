@@ -2,7 +2,7 @@
 <template>
   <div>
     <el-col :span="24">
-      <div class="grid-content bg-purple-dark">头部</div>
+      <div class="grid-content bg-purple-dark">宁波大学科学技术学院OJ系统 - 题目管理系统</div>
     </el-col>
   </div>
 </template>
