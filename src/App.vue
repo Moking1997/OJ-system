@@ -17,18 +17,18 @@
 </template>
 
 <script>
-import Header from '@/components/header'
-import Aside from '@/components/aside'
-import Main from '@/components/main'
+import Header from "@/components/header";
+import Aside from "@/components/aside";
+import Main from "@/components/main";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     Header,
     Main,
     Aside
   }
-}
+};
 </script>
 
 <style>

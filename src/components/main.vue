@@ -11,12 +11,12 @@
         <option v-for="item in catalog" :value="item.ID">{{item.title}}</option>
       </select>
 
-      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <!-- <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="选择题" name="first">选择题</el-tab-pane>
         <el-tab-pane label="多选题" name="second">多选题</el-tab-pane>
         <el-tab-pane label="编程题" name="third">编程题</el-tab-pane>
         <el-tab-pane label="函数题" name="fourth">函数题</el-tab-pane>
-      </el-tabs>
+      </el-tabs>-->
     </el-header>
     <el-main>
       <el-table :data="problems">
@@ -34,17 +34,14 @@
         </el-table-column>
         <el-table-column
           prop="tag"
-          label="标签"
+          label="类型"
           width="100"
           :filters="[{ text: '选择题', value: '选择题' }, { text: '填空题', value: '填空题' },{ text: '函数题', value: '函数题' }, { text: '判断题', value: '判断题' }]"
           :filter-method="filterTag"
           filter-placement="bottom-end"
         >
           <template slot-scope="scope">
-            <el-tag
-              :type="scope.row.tag === '判断题' ? 'primary' : (scope.row.tag === '填空题' ? 'success' : 'danger')"
-              disable-transitions
-            >{{scope.row.tag}}</el-tag>
+            <el-tag :type="filtercolor(scope.row.tag)" disable-transitions>{{scope.row.tag}}</el-tag>
           </template>
         </el-table-column>
       </el-table>
@@ -78,12 +75,15 @@ export default {
     filterTag(value, row) {
       return row.tag === value;
     },
-    filtercolor(scope, row) {
+    filtercolor(tag) {
       let color = "primary";
-      if ((scope.row.tag = "选择题")) {
+      if (tag == "选择题") {
         color = "success";
+      } else if (tag == "函数题") {
+        color = "danger";
+      } else if (tag == "判断题") {
+        color = "warning";
       }
-
       return color;
     },
     async catalog_change(index) {
@@ -93,9 +93,15 @@ export default {
       let res = await fetch("http://localhost:8088/api/catalog/" + parentID);
       let result = await res.json();
 
+      let pro = await fetch("http://localhost:8088/api/problem/" + parentID);
+      let problems = await pro.json();
+      console.log(parentID, problems);
+
       if (result.length > 0) {
         this.catalogs.push(result);
       }
+      this.problems = [problems][0];
+      // console.log(this.problems);
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -108,8 +114,8 @@ export default {
 
     this.catalogs = [catalogs];
     this.problems = [problems][0];
-    console.log(this.problems);
-    console.log(this.tableData);
+    // console.log(this.problems);
+    // console.log(this.tableData);
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}
@@ -162,6 +168,7 @@ select {
   padding: 10px;
   transition: box-shadow 0.25s ease;
   z-index: 2;
+  font-size: 14px;
 }
 
 select:focus {

@@ -34,305 +34,317 @@ export default {
     return {
       menus: [
         {
-          index: '1',
-          type: 'sub',
-          icon: 'el-icon-menu',
-          title: '题库集合',
+          index: "1",
+          type: "sub",
+          icon: "el-icon-menu",
+          title: "题库集合",
           children: [
             {
-              index: '1-1',
-              to: { name: 'set', params: {} },
-              title: 'C语言',
+              index: "1-1",
+              to: { name: "set", params: {} },
+              title: "C语言",
               children: [
                 {
-                  index: '1-1-1',
-                  to: { name: 'set', params: {} },
-                  title: '循环',
+                  index: "1-1-1",
+                  to: { name: "set", params: {} },
+                  title: "循环",
                   children: [
                     {
-                      index: '1-1-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "1-1-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '1-1-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "1-1-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '1-1-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "1-1-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '1-1-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "1-1-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '1-1-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "1-1-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '1-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "1-3-2",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             },
             {
-              index: '1-2',
-              to: { name: 'set', params: {} },
-              title: 'java',
+              index: "1-2",
+              to: { name: "set", params: {} },
+              title: "java",
               children: [
                 {
-                  index: '1-2-1',
-                  to: { name: 'set', params: {} },
-                  title: 'java循环',
+                  index: "1-2-1",
+                  to: { name: "set", params: {} },
+                  title: "java循环",
                   children: [
                     {
-                      index: '1-2-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "1-2-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '1-2-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "1-2-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '1-2-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "1-2-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '1-2-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "1-2-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '1-2-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "1-2-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '1-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "1-3-2",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             },
             {
-              index: '1-3',
-              to: { name: 'set', params: {} },
-              title: 'c++',
+              index: "1-3",
+              to: { name: "set", params: {} },
+              title: "c++",
               children: [
                 {
-                  index: '1-3-1',
-                  to: { name: 'set', params: {} },
-                  title: 'c++循环',
+                  index: "1-3-1",
+                  to: { name: "set", params: {} },
+                  title: "c++循环",
                   children: [
                     {
-                      index: '1-3-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "1-3-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '1-3-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "1-3-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '1-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "1-3-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '1-3-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "1-3-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '1-3-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "1-3-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '1-3-3',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "1-3-3",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             }
           ]
         },
         {
-          index: '2',
-          type: 'sub',
-          icon: 'el-icon-menu',
-          title: '我的题库',
+          index: "2",
+          type: "sub",
+          icon: "el-icon-menu",
+          title: "我的题库",
           children: [
             {
-              index: '2-1',
-              to: { name: 'set', params: {} },
-              title: 'C语言',
+              index: "2-1",
+              to: { name: "set", params: {} },
+              title: "C语言",
               children: [
                 {
-                  index: '2-1-1',
-                  to: { name: 'set', params: {} },
-                  title: '循环',
+                  index: "2-1-1",
+                  to: { name: "set", params: {} },
+                  title: "循环",
                   children: [
                     {
-                      index: '2-1-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "2-1-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '2-1-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "2-1-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '2-1-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "2-1-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '2-1-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "2-1-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '2-1-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "2-1-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '2-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "2-3-2",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             },
             {
-              index: '2-2',
-              to: { name: 'set', params: {} },
-              title: 'java',
+              index: "2-2",
+              to: { name: "set", params: {} },
+              title: "java",
               children: [
                 {
-                  index: '2-2-1',
-                  to: { name: 'set', params: {} },
-                  title: 'java循环',
+                  index: "2-2-1",
+                  to: { name: "set", params: {} },
+                  title: "java循环",
                   children: [
                     {
-                      index: '2-2-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "2-2-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '2-2-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "2-2-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '2-2-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "2-2-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '2-2-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "2-2-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '2-2-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "2-2-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '2-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "2-3-2",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             },
             {
-              index: '2-3',
-              to: { name: 'set', params: {} },
-              title: 'c++',
+              index: "2-3",
+              to: { name: "set", params: {} },
+              title: "c++",
               children: [
                 {
-                  index: '2-3-1',
-                  to: { name: 'set', params: {} },
-                  title: 'c++循环',
+                  index: "2-3-1",
+                  to: { name: "set", params: {} },
+                  title: "c++循环",
                   children: [
                     {
-                      index: '2-3-1-1',
-                      to: { name: 'set', params: {} },
-                      title: 'for'
+                      index: "2-3-1-1",
+                      to: { name: "set", params: {} },
+                      title: "for"
                     },
                     {
-                      index: '2-3-1-2',
-                      to: { name: 'set', params: {} },
-                      title: 'while'
+                      index: "2-3-1-2",
+                      to: { name: "set", params: {} },
+                      title: "while"
                     }
                   ]
                 },
                 {
-                  index: '2-3-2',
-                  to: { name: 'set', params: {} },
-                  title: '数组',
+                  index: "2-3-2",
+                  to: { name: "set", params: {} },
+                  title: "数组",
                   children: [
                     {
-                      index: '2-3-2-1',
-                      to: { name: 'set', params: {} },
-                      title: '一维数组'
+                      index: "2-3-2-1",
+                      to: { name: "set", params: {} },
+                      title: "一维数组"
                     },
                     {
-                      index: '2-3-2-2',
-                      to: { name: 'set', params: {} },
-                      title: '二维数组'
+                      index: "2-3-2-2",
+                      to: { name: "set", params: {} },
+                      title: "二维数组"
                     }
                   ]
                 },
                 {
-                  index: '2-3-3',
-                  to: { name: 'set', params: {} },
-                  title: '函数'
+                  index: "2-3-3",
+                  to: { name: "set", params: {} },
+                  title: "函数"
                 }
               ]
             }
           ]
+        },
+        {
+          index: "3",
+          type: "sub",
+          icon: "el-icon-menu",
+          title: "发布管理"
+        },
+        {
+          index: "4",
+          type: "sub",
+          icon: "el-icon-setting",
+          title: "题库设置"
         }
       ]
-    }
+    };
   },
   //生命周期 - 创建完成（访问当前this实例）
   created() {},
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}
-}
+};
 </script>
 <style scoped>
 /* @import url(); 引入css类 */

@@ -13,6 +13,10 @@ router.get('/get_test', async ctx => {
 router.get('/problem', async ctx => {
     ctx.body = await ctx.db.query('SELECT * FROM problem_table')
 })
+router.get('/problem/:tag', async ctx => {
+    let { tag } = ctx.params
+    ctx.body = await ctx.db.query('SELECT * FROM problem_table WHERE catalog_id=?', [tag])
+})
 router.get('/catalog/:parent', async ctx => {
     let { parent } = ctx.params
     ctx.body = await ctx.db.query('SELECT ID, title FROM catalog_table WHERE parentID=?', [parent])
