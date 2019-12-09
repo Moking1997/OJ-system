@@ -11,7 +11,7 @@ router.get('/get_test', async ctx => {
     ctx.body = await ctx.db.query('SELECT * FROM user_table')
 })
 router.get('/problem', async ctx => {
-    ctx.body = await ctx.db.query('SELECT * FROM problem_table')
+    ctx.body = await ctx.db.query('SELECT * FROM problem')
 })
 router.get('/problem/:tag', async ctx => {
     let { tag } = ctx.params

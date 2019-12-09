@@ -3,7 +3,7 @@ const Router = require('koa-router')
 const mysql = require('mysql')
 const co = require('co-mysql')
 
-let conn = mysql.createPool({ host: 'localhost', user: 'root', password: '123456', database: 'oj' })
+let conn = mysql.createPool({ host: '23.97.79.138', user: 'yxj', password: '123456', database: 'jol' })
 
 let server = new Koa()
 server.listen(8088)
