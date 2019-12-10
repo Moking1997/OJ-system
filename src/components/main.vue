@@ -11,21 +11,21 @@
         <option v-for="item in catalog" :value="item.ID">{{item.title}}</option>
       </select>
 
-      <!-- <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
+      <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
         <el-tab-pane label="选择题" name="first">选择题</el-tab-pane>
         <el-tab-pane label="多选题" name="second">多选题</el-tab-pane>
         <el-tab-pane label="编程题" name="third">编程题</el-tab-pane>
         <el-tab-pane label="函数题" name="fourth">函数题</el-tab-pane>
-      </el-tabs>-->
+      </el-tabs>
     </el-header>
     <el-main>
       <el-table :data="problems">
-        <el-table-column prop="ID" label="标号"></el-table-column>
+        <el-table-column prop="problem_id" label="标号"></el-table-column>
         <el-table-column prop="title" label="标题"></el-table-column>
         <el-table-column prop="score" label="分数"></el-table-column>
         <el-table-column prop="pass_count" label="通过数"></el-table-column>
-        <el-table-column prop="submit_count" label="提交数"></el-table-column>
-        <el-table-column prop="pass_rate" label="通过率"></el-table-column>
+        <el-table-column prop="source" label="作者"></el-table-column>
+        <el-table-column prop="in_date" label="通过率"></el-table-column>
         <el-table-column fixed="right" label="操作" width="100">
           <template slot-scope="scope">
             <el-button @click="handleClick(scope.row)" type="text" size="small">查看</el-button>
@@ -106,15 +106,15 @@ export default {
   },
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
-    let res = await fetch("http://localhost:8088/api/catalog/0");
-    let catalogs = await res.json();
+    // let res = await fetch("http://localhost:8088/api/catalog/0");
+    // let catalogs = await res.json();
 
     let pro = await fetch("http://localhost:8088/api/problem");
     let problems = await pro.json();
 
-    this.catalogs = [catalogs];
+    // this.catalogs = [catalogs];
     this.problems = [problems][0];
-    // console.log(this.problems);
+    console.log(this.problems);
     // console.log(this.tableData);
   },
   //生命周期 - 挂载完成（访问DOM元素）

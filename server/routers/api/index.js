@@ -2,20 +2,12 @@ const Router = require('koa-router')
 
 let router = new Router()
 
-
-router.get('/account_catalog', async ctx => {
-    ctx.body = ['娱乐']
-})
-
-router.get('/get_test', async ctx => {
-    ctx.body = await ctx.db.query('SELECT * FROM user_table')
-})
 router.get('/problem', async ctx => {
     ctx.body = await ctx.db.query('SELECT * FROM problem')
 })
-router.get('/problem/:tag', async ctx => {
-    let { tag } = ctx.params
-    ctx.body = await ctx.db.query('SELECT * FROM problem_table WHERE catalog_id=?', [tag])
+router.get('/problem/:id', async ctx => {
+    let { id } = ctx.params
+    ctx.body = await ctx.db.query('SELECT * FROM problem WHERE problem_id=?', [id])
 })
 router.get('/catalog/:parent', async ctx => {
     let { parent } = ctx.params
