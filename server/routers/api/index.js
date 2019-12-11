@@ -1,24 +1,12 @@
 const Router = require('koa-router')
 const Sequelize = require('sequelize');
 
-const sequelize = new Sequelize('jol', 'root', '123456', {
+const sequelize = new Sequelize('oj', 'root', '123456', {
     host: 'localhost',
     dialect: 'mysql' ,
 });
 
 let router = new Router()
-
-router.get('/problem', async ctx => {
-    ctx.body = await ctx.db.query('SELECT * FROM problem')
-})
-router.get('/problem/:id', async ctx => {
-    let { id } = ctx.params
-    ctx.body = await ctx.db.query('SELECT * FROM problem WHERE problem_id=?', [id])
-})
-router.get('/catalog/:parent', async ctx => {
-    let { parent } = ctx.params
-    ctx.body = await ctx.db.query('SELECT ID, title FROM catalog_table WHERE parentID=?', [parent])
-})
 
 sequelize
     .authenticate()
@@ -28,15 +16,19 @@ sequelize
     .catch(err => {
         console.error('Unable to connect to the database:', err);
     });
-const problem = sequelize.define('problem', {
+
+const Problem = sequelize.define('problem', {
     // 属性
-    problem_id: {
+    id: {
         type: Sequelize.BIGINT(11),
         primaryKey: true
     },
     title: {
         type: Sequelize.STRING
         // allowNull 默认为 true
+    },
+    tag:{
+        type: Sequelize.STRING
     }
 }, {
         freezeTableName: true,
@@ -50,7 +42,20 @@ const problem = sequelize.define('problem', {
             },
         ]
 });
-problem.findAll().then(problems => {
-    console.log("All users:", JSON.stringify(problems, null, 4));
-});
+// Problem.findAll().then(problems => {
+//     console.log("All users:", JSON.stringify(problems, null, 4));
+// });
+
+router.get('/problem/:id', async ctx => {
+    let { id } = ctx.params
+    ctx.body = await Problem.findOne({ where: { id: id } })
+})
+router.get('/problem', async ctx => {
+    ctx.body = await Problem.findAll()
+})
+
+router.get('/tags/:tag', async ctx => {
+    let { tag } = ctx.params
+    ctx.body = await Problem.findOne({ where: { tag: tag } })})
+
 module.exports = router.routes()

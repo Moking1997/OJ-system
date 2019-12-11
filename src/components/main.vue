@@ -12,7 +12,7 @@
       </select>
 
       <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-        <el-tab-pane label="选择题" name="first">选择题</el-tab-pane>
+        <el-tab-pane label="选择题" name="first" @click="">选择题</el-tab-pane>
         <el-tab-pane label="多选题" name="second">多选题</el-tab-pane>
         <el-tab-pane label="编程题" name="third">编程题</el-tab-pane>
         <el-tab-pane label="函数题" name="fourth">函数题</el-tab-pane>
@@ -32,18 +32,7 @@
             <el-button type="text" size="small">编辑</el-button>
           </template>
         </el-table-column>
-        <el-table-column
-          prop="tag"
-          label="类型"
-          width="100"
-          :filters="[{ text: '选择题', value: '选择题' }, { text: '填空题', value: '填空题' },{ text: '函数题', value: '函数题' }, { text: '判断题', value: '判断题' }]"
-          :filter-method="filterTag"
-          filter-placement="bottom-end"
-        >
-          <template slot-scope="scope">
-            <el-tag :type="filtercolor(scope.row.tag)" disable-transitions>{{scope.row.tag}}</el-tag>
-          </template>
-        </el-table-column>
+       
       </el-table>
     </el-main>
   </el-container>
@@ -69,11 +58,24 @@ export default {
     };
   },
   methods: {
-    handleClick(tab, event) {
-      console.log(tab, event);
-    },
-    filterTag(value, row) {
-      return row.tag === value;
+    async handleClick(tab, event) {
+      let t = '选择题'
+       if (tab.name === 'first') {
+        t = '选择题'
+        
+      } else if (tab.name === 'second') {
+        t = '判断题'
+      }
+      else if (tab.name === 'third') {
+        t = '填空题'
+      }
+      else if (tab.name === 'fourth') {
+        t = '函数题'
+      }
+      let pro = await fetch("http://localhost:8088/api/tags/" + t);
+      let problems = await pro.json();
+      this.problems = [problems];
+      console.log(t)
     },
     filtercolor(tag) {
       let color = "primary";
