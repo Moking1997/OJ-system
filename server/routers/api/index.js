@@ -1,9 +1,10 @@
 const Router = require('koa-router')
 const Sequelize = require('sequelize');
+const Op = Sequelize.Op;
 
 const sequelize = new Sequelize('oj', 'root', '123456', {
     host: 'localhost',
-    dialect: 'mysql' ,
+    dialect: 'mysql',
 });
 
 let router = new Router()
@@ -18,44 +19,67 @@ sequelize
     });
 
 const Problem = sequelize.define('problem', {
-    // 属性
     id: {
         type: Sequelize.BIGINT(11),
         primaryKey: true
     },
     title: {
         type: Sequelize.STRING
-        // allowNull 默认为 true
     },
-    tag:{
+    tag: {
+        type: Sequelize.STRING
+    },
+    catalog_id: {
         type: Sequelize.STRING
     }
 }, {
-        freezeTableName: true,
-        //去掉默认的添加时间和更新时间
-        timestamps: false,
-        indexes: [
-            //普通索引,默认BTREE
-            {
-                unique: true,
-                fields: ['pid']
-            },
-        ]
+    freezeTableName: true,
+    timestamps: false,
 });
-// Problem.findAll().then(problems => {
-//     console.log("All users:", JSON.stringify(problems, null, 4));
-// });
+
+const Catalog = sequelize.define('catalog', {
+    ID: {
+        type: Sequelize.BIGINT(11),
+        primaryKey: true
+    },
+    title: {
+        type: Sequelize.STRING
+    },
+    parentID: {
+        type: Sequelize.STRING
+    }
+}, {
+    freezeTableName: true,
+    timestamps: false,
+});
 
 router.get('/problem/:id', async ctx => {
     let { id } = ctx.params
     ctx.body = await Problem.findOne({ where: { id: id } })
+})
+router.get('/problem/catalog', async ctx => {
+    // let { id } = ctx.params
+    ctx.body = await Problem.findAll()
+})
+router.get('/problem/catalog/:id', async ctx => {
+    let { id } = ctx.params
+    ctx.body = await Problem.findAll({ where: { catalog_id: { [Op.like]: `%${id},%` } } })
 })
 router.get('/problem', async ctx => {
     ctx.body = await Problem.findAll()
 })
 
 router.get('/tags/:tag', async ctx => {
-    let { tag } = ctx.params
-    ctx.body = await Problem.findOne({ where: { tag: tag } })})
+    console.log('data', ctx.params['tag'])
+    let id = (ctx.params['tag']).split(",")[0]
+    let tag = (ctx.params['tag']).split(",")[1]
+    console.log(id, tag)
+    ctx.body = await Problem.findAll({ where: { catalog_id: { [Op.like]: `%${id},%` }, tag: tag } })
+})
+
+router.get('/catalog/:parentID', async ctx => {
+    let { parentID } = ctx.params
+    ctx.body = await Catalog.findAll({ where: { parentID: parentID } })
+})
 
 module.exports = router.routes()
