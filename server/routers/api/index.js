@@ -26,11 +26,29 @@ const Problem = sequelize.define('problem', {
     title: {
         type: Sequelize.STRING
     },
-    // tag: {
-    //     type: Sequelize.STRING
-    // },
+    source: {
+        type: Sequelize.STRING
+    },
+    description: {
+        type: Sequelize.TEXT
+    },
+    input: {
+        type: Sequelize.TEXT
+    },
+    output: {
+        type: Sequelize.TEXT
+    },
+    sample_input: {
+        type: Sequelize.TEXT
+    },
+    sample_output: {
+        type: Sequelize.TEXT
+    },
     catalogs: {
         type: Sequelize.STRING
+    },
+    in_date: {
+        type: Sequelize.DATE
     }
 }, {
     freezeTableName: true,

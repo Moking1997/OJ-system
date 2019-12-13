@@ -7,31 +7,28 @@
     <h1>{{pri_problem.title}}</h1>
     <el-table :data="problems">
       <el-table-column prop="id" label="标号"></el-table-column>
-      <el-table-column prop="title" label="标题"></el-table-column>
       <el-table-column prop="source" label="作者"></el-table-column>
+      <el-table-column prop="date" label="日期"></el-table-column>
     </el-table>
     <div class="problem-inner">
       <div class="problem-describe">
-        <div class="content-title">本题要求实现一个计算m~n（m<n）之间所有整数的和的简单函数。</div>
+        <div class="content-title">{{pri_problem.description}}</div>
       </div>
       <div class="problem-input">
         <div class="content-title">输入格式:</div>
-        <div class="content-text">其中m和n是用户传入的参数，保证有m<n。函数返回的是m~n之间所有整数的和。</div>
+        <div class="content-text">{{pri_problem.input}}</div>
       </div>
       <div class="problem-output">
         <div class="content-title">输出格式:</div>
-        <div class="content-text">其中m和n是用户传入的参数，保证有m<n。函数返回的是m~n之间所有整数的和。</div>
+        <div class="content-text">{{pri_problem.output}}</div>
       </div>
       <div class="problem-incase">
         <div class="content-title">输入样例:</div>
-        <div class="content-case">
-          6
-          <br />8 0 1 9 2
-        </div>
+        <div class="content-case">{{pri_problem.sample_input}}</div>
       </div>
       <div class="problem-outcase">
         <div class="content-title">输入样例:</div>
-        <div class="content-case">10 2</div>
+        <div class="content-case">{{pri_problem.sample_output}}</div>
       </div>
     </div>
     <div style="margin:10px auto;text-align:center;width:100%">
@@ -44,7 +41,13 @@
 export default {
   data() {
     return {
-      problems: [{ id: 1, title: "test", source: "admin" }]
+      problems: [
+        {
+          id: this.pri_problem.problem_id,
+          date: this.pri_problem.in_date,
+          source: this.pri_problem.source
+        }
+      ]
     };
   },
   props: ["priview", "pri_problem"],
