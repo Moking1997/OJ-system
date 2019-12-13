@@ -2,7 +2,7 @@ const Router = require('koa-router')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const sequelize = new Sequelize('oj', 'root', '123456', {
+const sequelize = new Sequelize('jol', 'root', '123456', {
     host: 'localhost',
     dialect: 'mysql',
 });
@@ -19,17 +19,17 @@ sequelize
     });
 
 const Problem = sequelize.define('problem', {
-    id: {
+    problem_id: {
         type: Sequelize.BIGINT(11),
         primaryKey: true
     },
     title: {
         type: Sequelize.STRING
     },
-    tag: {
-        type: Sequelize.STRING
-    },
-    catalog_id: {
+    // tag: {
+    //     type: Sequelize.STRING
+    // },
+    catalogs: {
         type: Sequelize.STRING
     }
 }, {
@@ -37,7 +37,7 @@ const Problem = sequelize.define('problem', {
     timestamps: false,
 });
 
-const Catalog = sequelize.define('catalog', {
+const Catalog = sequelize.define('problem_catalogs', {
     ID: {
         type: Sequelize.BIGINT(11),
         primaryKey: true
@@ -55,7 +55,7 @@ const Catalog = sequelize.define('catalog', {
 
 router.get('/problem/:id', async ctx => {
     let { id } = ctx.params
-    ctx.body = await Problem.findOne({ where: { id: id } })
+    ctx.body = await Problem.findAll({ where: { problem_id: id } })
 })
 router.get('/problem/catalog', async ctx => {
     // let { id } = ctx.params
@@ -63,10 +63,28 @@ router.get('/problem/catalog', async ctx => {
 })
 router.get('/problem/catalog/:id', async ctx => {
     let { id } = ctx.params
-    ctx.body = await Problem.findAll({ where: { catalog_id: { [Op.like]: `%${id},%` } } })
+    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%${id},%` } } })
 })
 router.get('/problem', async ctx => {
     ctx.body = await Problem.findAll()
+})
+router.get('/getProblemList', async ctx => {
+    console.log(ctx.request.query)
+    // ctx.body = await Catalog.findAll()
+    let { currentPage = 1 } = ctx.request.query
+    let offset = (currentPage - 1) * 10;
+    let userList = await Problem.findAndCountAll({
+        // where: {
+        // },
+        offset,
+        limit: 10
+    }).then(res => {
+        let result = {};
+        result.data = res.rows;
+        result.total = res.count;
+        return result;
+    });
+    ctx.body = userList;
 })
 
 router.get('/tags/:tag', async ctx => {
@@ -74,7 +92,7 @@ router.get('/tags/:tag', async ctx => {
     let id = (ctx.params['tag']).split(",")[0]
     let tag = (ctx.params['tag']).split(",")[1]
     console.log(id, tag)
-    ctx.body = await Problem.findAll({ where: { catalog_id: { [Op.like]: `%${id},%` }, tag: tag } })
+    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%${id},%` }, tag: tag } })
 })
 
 router.get('/catalog/:parentID', async ctx => {

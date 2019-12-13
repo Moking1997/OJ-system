@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div class="problem-priview">
-    <div style="width:100%;text-align:right">
+    <div style="width:100%;cursor: pointer;text-align:right;">
       <i class="el-icon-close" @click="closePriview()"></i>
     </div>
     <h1>{{pri_problem.title}}</h1>
@@ -35,7 +35,7 @@
       </div>
     </div>
     <div style="margin:10px auto;text-align:center;width:100%">
-      <el-button type="primary">查看详情</el-button>
+      <el-button type="primary" @click="toProblem()">查看详情</el-button>
     </div>
   </div>
 </template>
@@ -53,6 +53,14 @@ export default {
       this.priview.display = false;
       console.log(this.priview);
       this.$emit("childFn", 0);
+    },
+    toProblem() {
+      this.$router.push({
+        name: "problem",
+        params: {
+          id: this.pri_problem
+        }
+      });
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -81,6 +89,5 @@ export default {
   background-color: #f5f7fa;
   border-color: #e4e7ed;
   color: #666;
-  cursor: not-allowed;
 }
 </style>

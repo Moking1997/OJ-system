@@ -3,16 +3,27 @@
   <el-row>
     <el-col :span="priview.pro">
       <el-container>
-        <el-header style="text-align: left; font-size: 12px">
-          <select
-            v-for="catalog,index in catalogs"
-            :key="catalog.ID"
-            ref="catalog"
-            @change="catalog_change(index)"
-          >
-            <option value="-1">请选择</option>
-            <option v-for="item in catalog" :value="item.ID">{{item.title}}</option>
-          </select>
+        <el-header style="text-align: left; font-size: 12px; height:63px;">
+          <el-row type="flex" justify="space-between">
+            <el-col :span="12">
+              <select
+                v-for="catalog,index in catalogs"
+                :key="catalog.ID"
+                ref="catalog"
+                @change="catalog_change(index)"
+              >
+                <option value="-1">请选择</option>
+                <option v-for="item in catalog" :value="item.ID">{{item.title}}</option>
+              </select>
+            </el-col>
+            <el-col :span="12" style="text-align:right;">
+              <router-link to="add_problem">
+                <el-button type="primary">新建题目</el-button>
+              </router-link>
+
+              <el-button type="success">批量添加题库集</el-button>
+            </el-col>
+          </el-row>
 
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="选择题" name="first" @click>选择题</el-tab-pane>
@@ -23,7 +34,8 @@
         </el-header>
         <el-main>
           <el-table :data="problems">
-            <el-table-column prop="id" label="标号"></el-table-column>
+            <el-table-column type="selection" width="55"></el-table-column>
+            <el-table-column prop="problem_id" label="标号"></el-table-column>
             <el-table-column prop="title" label="标题">
               <template slot-scope="scope">
                 <el-button
@@ -34,9 +46,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="score" label="分数"></el-table-column>
-            <el-table-column prop="pass_count" label="通过数"></el-table-column>
             <el-table-column prop="source" label="作者"></el-table-column>
-            <el-table-column prop="in_date" label="通过率"></el-table-column>
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button type="text" size="small">编辑</el-button>
@@ -44,6 +54,13 @@
             </el-table-column>
           </el-table>
         </el-main>
+        <el-pagination
+          @current-change="handleCurrentChange"
+          :current-page="pages.currentPage"
+          :page-size="pages.limit"
+          layout="total, sizes, prev, pager, next, jumper"
+          :total="pages.total"
+        ></el-pagination>
       </el-container>
     </el-col>
     <el-col :span="priview.pri">
@@ -68,6 +85,11 @@ export default {
       passing_rate: 0.27
     };
     return {
+      pages: {
+        limit: 10,
+        currentPage: 1,
+        total: 0
+      },
       priview: {
         display: false,
         pro: 24,
@@ -131,6 +153,14 @@ export default {
     closePriview(span) {
       this.priview.pri = span;
       this.priview.pro = 24 - span;
+    },
+    async handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      let pro = await fetch(
+        "http://localhost:8088/api/getProblemList/?currentPage=" + val
+      );
+      let problems = await pro.json();
+      this.problems = problems.data;
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -138,12 +168,13 @@ export default {
     let res = await fetch("http://localhost:8088/api/catalog/0");
     let catalogs = await res.json();
 
-    let pro = await fetch("http://localhost:8088/api/problem");
+    let pro = await fetch("http://localhost:8088/api/getProblemList");
     let problems = await pro.json();
 
     this.catalogs = [catalogs];
-    this.problems = [problems][0];
-    // console.log(this.problems);
+    this.problems = problems.data;
+    this.pages.total = problems.total;
+    // console.log(problems.data);
     // console.log(this.tableData);
   },
   //生命周期 - 挂载完成（访问DOM元素）
@@ -178,9 +209,6 @@ select {
   border: none;
   background: transparent;
   background-image: none;
-  /* -webkit-appearance: none;
-  -moz-appearance: none; */
-
   display: inline-block;
   width: 100px;
   position: relative;

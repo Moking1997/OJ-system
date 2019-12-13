@@ -63,4 +63,7 @@ a:link {
   background: #111;
   color: #fff;
 }
+.el-table th > .cell > .el-checkbox {
+  left: 4px;
+}
 </style>
