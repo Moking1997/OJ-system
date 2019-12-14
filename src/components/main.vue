@@ -71,6 +71,7 @@
 
 <script>
 import Priview from "@/components/preview";
+import { Server } from "@/config";
 export default {
   components: {
     Priview
@@ -117,7 +118,7 @@ export default {
         tag = "函数题";
       }
       let pro = await fetch(
-        "http://localhost:8088/api/tags/" + this.catalog_id + "," + tag
+        Server + "/api/tags/" + this.catalog_id + "," + tag
       );
       let problems = await pro.json();
       this.problems = [problems][0];
@@ -132,12 +133,10 @@ export default {
       this.catalog_id = parentID;
       this.catalogs = this.catalogs.splice(0, index + 1);
 
-      let res = await fetch("http://localhost:8088/api/catalog/" + parentID);
+      let res = await fetch(Server + "/api/catalog/" + parentID);
       let result = await res.json();
 
-      let pro = await fetch(
-        "http://localhost:8088/api/problem/catalog/" + parentID
-      );
+      let pro = await fetch(Server + "/api/problem/catalog/" + parentID);
       let problems = await pro.json();
 
       if (result.length > 0) {
@@ -156,19 +155,17 @@ export default {
     },
     async handleCurrentChange(val) {
       console.log(`当前页: ${val}`);
-      let pro = await fetch(
-        "http://localhost:8088/api/getProblemList/?currentPage=" + val
-      );
+      let pro = await fetch(Server + "/api/getProblemList/?currentPage=" + val);
       let problems = await pro.json();
       this.problems = problems.data;
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
-    let res = await fetch("http://localhost:8088/api/catalog/0");
+    let res = await fetch(Server + "/api/catalog/0");
     let catalogs = await res.json();
 
-    let pro = await fetch("http://localhost:8088/api/getProblemList");
+    let pro = await fetch(Server + "/api/getProblemList");
     let problems = await pro.json();
 
     this.catalogs = [catalogs];
