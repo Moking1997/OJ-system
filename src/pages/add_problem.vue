@@ -1,12 +1,71 @@
 <!--  -->
 <template>
-  <div>新建题目</div>
+  <el-main>
+    添加题目
+    <form ref="form1" method="post" enctype="multipart/form-data">
+      <br />
+      <br />标题:
+      <el-input v-model="problem.title" name="title"></el-input>
+      <br />
+      <br />分类:
+      <el-input v-model="problem.catalogs" name="catalogs"></el-input>
+      <br />
+      <br />标签:
+      <el-input v-model="problem.tags" name="tags"></el-input>
+      <br />
+      <br />
+      <input type="hidden" name="describe" v-model="problem.describe" />
+      <br />
+      <br />题目描述:
+      <mavon-editor v-model="problem.describe" />
+      <br />
+      <br />输入格式:
+      <mavon-editor v-model="problem.input" />
+      <br />
+      <br />输出格式:
+      <mavon-editor v-model="problem.output" />
+      <br />
+      <br />输入样例:
+      <el-input v-model="problem.sample_input" name="sample_input" placeholder="输入样例"></el-input>
+      <br />
+      <br />输出样例:
+      <el-input v-model="problem.sample_output" name="sample_output" placeholder="输出样例"></el-input>
+      <br />
+      <br />
+      <el-button type="primary" @click="issueProblem()">发布</el-button>
+    </form>
+  </el-main>
 </template>
 
 <script>
 export default {
   data() {
-    return {};
+    return {
+      problem: {
+        title: "",
+        tags: "",
+        catalogs: "",
+        describe: "> 输入题目描述",
+        input: "> 输入格式",
+        output: "> 输出格式",
+        sample_input: "",
+        sample_output: ""
+      }
+    };
+  },
+  methods: {
+    async issueProblem() {
+      let oForm = new FormData(this.$refs["form1"]);
+      console.log(this.$refs["form1"]);
+      console.log(JSON.stringify(this.article));
+      let res = await fetch("http://localhost:8088/api/issue", {
+        method: "POST",
+        body: oForm
+      });
+
+      // let json = await res.json();
+      // console.log(json);
+    }
   },
   //生命周期 - 创建完成（访问当前this实例）
   created() {},

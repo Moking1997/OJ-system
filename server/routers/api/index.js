@@ -81,7 +81,7 @@ router.get('/problem/catalog', async ctx => {
 })
 router.get('/problem/catalog/:id', async ctx => {
     let { id } = ctx.params
-    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%${id},%` } } })
+    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%,${id},%` } } })
 })
 router.get('/problem', async ctx => {
     ctx.body = await Problem.findAll()
@@ -107,15 +107,44 @@ router.get('/getProblemList', async ctx => {
 
 router.get('/tags/:tag', async ctx => {
     console.log('data', ctx.params['tag'])
-    let id = (ctx.params['tag']).split(",")[0]
-    let tag = (ctx.params['tag']).split(",")[1]
+    let id = (ctx.params['tag']).split("&")[0]
+    let tag = (ctx.params['tag']).split("&")[1]
     console.log(id, tag)
-    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%${id},%` }, tag: tag } })
+    ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%,${id},%` }, tag: tag } })
 })
 
 router.get('/catalog/:parentID', async ctx => {
     let { parentID } = ctx.params
     ctx.body = await Catalog.findAll({ where: { parentID: parentID } })
+})
+
+router.get('/getProblemList/:date', async ctx => {
+    let id = (ctx.params['date']).split("&")[0]
+    let tag = (ctx.params['date']).split("&")[1]
+    let currentPage = (ctx.params['date']).split("&")[2] || '1'
+    // console.log(ctx.request.query)
+    // ctx.body = await Catalog.findAll()
+    let offset = (currentPage - 1) * 10;
+    let userList = await Problem.findAndCountAll({
+        where: { catalogs: { [Op.like]: `%,${id},%` }, tag: tag },
+        offset,
+        limit: 10
+    }).then(res => {
+        let result = {};
+        result.data = res.rows;
+        result.total = res.count;
+        return result;
+    });
+    ctx.body = userList;
+})
+router.post('/issue', async ctx => {
+    // console.log(ctx.request.body)
+    // console.log(ctx.request.files)
+    console.log(ctx.request.fields)
+    let { title, catalogs, tags, contents } = ctx.request.fields
+    console.log(title, catalogs, tags, contents)
+    Article.create({ title: title, catalogs: catalogs, tags: tags, content: contents })
+    ctx.response.body = 'success'
 })
 
 module.exports = router.routes()

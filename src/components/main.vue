@@ -26,7 +26,7 @@
           </el-row>
 
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
-            <el-tab-pane label="选择题" name="first" @click>选择题</el-tab-pane>
+            <el-tab-pane label="选择题" name="first">选择题</el-tab-pane>
             <el-tab-pane label="多选题" name="second">多选题</el-tab-pane>
             <el-tab-pane label="编程题" name="third">编程题</el-tab-pane>
             <el-tab-pane label="函数题" name="fourth">函数题</el-tab-pane>
@@ -46,7 +46,7 @@
               </template>
             </el-table-column>
             <el-table-column prop="score" label="分数"></el-table-column>
-            <el-table-column prop="source" label="作者"></el-table-column>
+            <!-- <el-table-column prop="source" label="作者"></el-table-column> -->
             <el-table-column fixed="right" label="操作" width="100">
               <template slot-scope="scope">
                 <el-button type="text" size="small">编辑</el-button>
@@ -97,37 +97,35 @@ export default {
         pri: 0
       },
       catalog_id: 0,
+      currentPage: 1,
+      tag: 1,
       pri_problem: [],
-      tableData: Array(10).fill(item),
       activeName: "first",
       catalogs: [],
-      problems: [],
-      value: "1"
+      problems: []
     };
   },
   methods: {
     async handleClick(tab, event) {
-      let tag = "选择题";
+      let tag = "1";
       if (tab.name === "first") {
-        tag = "选择题";
+        tag = "1";
       } else if (tab.name === "second") {
-        tag = "判断题";
+        tag = "2";
       } else if (tab.name === "third") {
-        tag = "填空题";
+        tag = "3";
       } else if (tab.name === "fourth") {
-        tag = "函数题";
+        tag = "4";
       }
-      let pro = await fetch(
-        Server + "/api/tags/" + this.catalog_id + "," + tag
-      );
-      let problems = await pro.json();
-      this.problems = [problems][0];
-      console.log(problems);
+      this.tag = tag;
+      this.getProblemList();
     },
     async catalog_change(index) {
       let parentID = this.$refs["catalog"][index].value;
 
       if (parentID == -1) {
+        this.catalog_id = 0;
+        this.getProblemList();
         return;
       }
       this.catalog_id = parentID;
@@ -136,13 +134,10 @@ export default {
       let res = await fetch(Server + "/api/catalog/" + parentID);
       let result = await res.json();
 
-      let pro = await fetch(Server + "/api/problem/catalog/" + parentID);
-      let problems = await pro.json();
-
       if (result.length > 0) {
         this.catalogs.push(result);
       }
-      this.problems = [problems][0];
+      this.getProblemList();
     },
     problemPriview(id) {
       this.priview.pro = 15;
@@ -154,12 +149,35 @@ export default {
       this.priview.pro = 24 - span;
     },
     async handleCurrentChange(val) {
-      console.log(`当前页: ${val}`);
-      let pro = await fetch(Server + "/api/getProblemList/?currentPage=" + val);
+      // console.log(`当前页: ${val}`);
+      this.currentPage = val;
+      this.getProblemList();
+    },
+    async getProblemList() {
+      console.log(
+        "分类",
+        this.catalog_id,
+        "标签",
+        this.tag,
+        "当前页:",
+        this.currentPage
+      );
+      let pro = await fetch(
+        Server +
+          "/api/getProblemList/" +
+          this.catalog_id +
+          "&" +
+          this.tag +
+          "&" +
+          this.currentPage
+      );
+      // console.log(this.problems);
       let problems = await pro.json();
       this.problems = problems.data;
     }
   },
+  watch: {},
+
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
     let res = await fetch(Server + "/api/catalog/0");
