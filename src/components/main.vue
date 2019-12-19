@@ -24,7 +24,6 @@
               <el-button type="success">批量添加题库集</el-button>
             </el-col>
           </el-row>
-
           <el-tabs v-model="activeName" type="card" @tab-click="handleClick">
             <el-tab-pane label="选择题" name="first">选择题</el-tab-pane>
             <el-tab-pane label="多选题" name="second">多选题</el-tab-pane>
@@ -174,6 +173,7 @@ export default {
       // console.log(this.problems);
       let problems = await pro.json();
       this.problems = problems.data;
+      this.pages.total = problems.total;
     }
   },
   watch: {},

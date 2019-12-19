@@ -86,6 +86,15 @@ router.get('/problem/catalog/:id', async ctx => {
 router.get('/problem', async ctx => {
     ctx.body = await Problem.findAll()
 })
+router.get('/problem/data/:data', async ctx => {
+    let { data } = ctx.params
+    let content = ",0,1,6,"
+    Problem.update({ catalogs: content }, {
+        where: { title: { [Op.like]: `%${data}%` } }
+    })
+    ctx.body = await Problem.findAll({ where: { title: { [Op.like]: `%${data}%` } } })
+
+})
 router.get('/getProblemList', async ctx => {
     console.log(ctx.request.query)
     // ctx.body = await Catalog.findAll()

@@ -1,10 +1,9 @@
 <!--  -->
 <template>
   <el-main>
-    添加题目
+    <el-button type="primary">新建题目</el-button>
     <form ref="form1" method="post" enctype="multipart/form-data">
-      <br />
-      <br />标题:
+      标题:
       <el-input v-model="problem.title" name="title"></el-input>
       <br />
       <br />分类:
@@ -15,7 +14,6 @@
       <br />
       <br />
       <input type="hidden" name="describe" v-model="problem.describe" />
-      <br />
       <br />题目描述:
       <mavon-editor v-model="problem.describe" />
       <br />
