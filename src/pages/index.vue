@@ -1,7 +1,7 @@
 <!--  -->
 <template>
   <div>
-    <Main/>
+    <Main />
   </div>
 </template>
 
@@ -11,7 +11,7 @@ export default {
   data() {
     return {};
   },
-  components:{
+  components: {
     Main
   },
   //生命周期 - 创建完成（访问当前this实例）

@@ -8,22 +8,14 @@
           {{menu.title}}
         </router-link>
       </template>
-      <el-submenu
-        :index="child.index"
-        v-if="menu.type=='sub'"
-        v-for="child in menu.children"
-        :key="child.id"
-      >
-        <template slot="title">{{child.title}}</template>
-        <el-submenu :index="child.index" v-for="child in child.children" :key="child.id">
-          <template slot="title">{{child.title}}</template>
-          <el-menu-item
-            :index="child.index"
-            v-for="child in child.children"
-            :key="child.id"
-          >{{child.title}}</el-menu-item>
-        </el-submenu>
-      </el-submenu>
+      <el-menu-item-group>
+        <el-menu-item
+          :index="child.index"
+          v-if="menu.type=='sub'"
+          v-for="child in menu.children"
+          :key="child.id"
+        >{{child.title}}</el-menu-item>
+      </el-menu-item-group>
     </el-submenu>
   </el-menu>
 </template>

@@ -32,7 +32,7 @@
           </el-tabs>
         </el-header>
         <el-main>
-          <el-table :data="problems">
+          <el-table :data="list">
             <el-table-column type="selection" width="55"></el-table-column>
             <el-table-column prop="problem_id" label="标号"></el-table-column>
             <el-table-column prop="title" label="标题">
@@ -54,11 +54,11 @@
           </el-table>
         </el-main>
         <el-pagination
-          @current-change="handleCurrentChange"
+          @current-change="setPage"
           :current-page="pages.currentPage"
           :page-size="pages.limit"
           layout="total, sizes, prev, pager, next, jumper"
-          :total="pages.total"
+          :total="total"
         ></el-pagination>
       </el-container>
     </el-col>
@@ -71,6 +71,7 @@
 <script>
 import Priview from "@/components/preview";
 import { Server } from "@/config";
+import { mapActions, mapState } from "vuex";
 export default {
   components: {
     Priview
@@ -87,7 +88,6 @@ export default {
     return {
       pages: {
         limit: 10,
-        currentPage: 1,
         total: 0
       },
       priview: {
@@ -100,7 +100,7 @@ export default {
       tag: 1,
       pri_problem: [],
       activeName: "first",
-      catalogs: [],
+      // catalogs: [],
       problems: []
     };
   },
@@ -117,6 +117,7 @@ export default {
         tag = "4";
       }
       this.tag = tag;
+      this.setTag(tag);
       this.getProblemList();
     },
     async catalog_change(index) {
@@ -124,18 +125,22 @@ export default {
 
       if (parentID == -1) {
         this.catalog_id = 0;
-        this.getProblemList();
+        this.getProblems();
         return;
       }
-      this.catalog_id = parentID;
-      this.catalogs = this.catalogs.splice(0, index + 1);
+      // this.catalog_id = parentID;
+      // console.log(this.catalogs);
+      // this.catalogs = this.catalogs.splice(0, index + 1);
+      // console.log(index);
+      // console.log(this.catalogs);
 
-      let res = await fetch(Server + "/api/catalog/" + parentID);
-      let result = await res.json();
+      // let res = await fetch(Server + "/api/catalog/" + parentID);
+      // let result = await res.json();
 
-      if (result.length > 0) {
-        this.catalogs.push(result);
-      }
+      // if (result.length > 0) {
+      //   this.catalogs.push(result);
+      // }
+      this.setCatalogs(parentID, index);
       this.getProblemList();
     },
     problemPriview(id) {
@@ -153,14 +158,6 @@ export default {
       this.getProblemList();
     },
     async getProblemList() {
-      console.log(
-        "分类",
-        this.catalog_id,
-        "标签",
-        this.tag,
-        "当前页:",
-        this.currentPage
-      );
       let pro = await fetch(
         Server +
           "/api/getProblemList/" +
@@ -174,21 +171,29 @@ export default {
       let problems = await pro.json();
       this.problems = problems.data;
       this.pages.total = problems.total;
-    }
+    },
+    ...mapActions(["getProblems", "setTag", "setCatalogs", "setPage"])
   },
   watch: {},
-
+  computed: {
+    ...mapState(["total", "list", "catalogs"]),
+    ...mapState({
+      stateproblems: state => state.problems.list
+    })
+  },
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
-    let res = await fetch(Server + "/api/catalog/0");
-    let catalogs = await res.json();
+    // let res = await fetch(Server + "/api/catalog/0");
+    // let catalogs = await res.json();
 
-    let pro = await fetch(Server + "/api/getProblemList");
-    let problems = await pro.json();
+    // let pro = await fetch(Server + "/api/getProblemList");
+    // let problems = await pro.json();
 
-    this.catalogs = [catalogs];
-    this.problems = problems.data;
-    this.pages.total = problems.total;
+    // this.catalogs = [catalogs];
+    // this.problems = problems.data;
+    this.setCatalogs(0, 0);
+    this.getProblems();
+    // this.pages.total = problems.total;
     // console.log(problems.data);
     // console.log(this.tableData);
   },
