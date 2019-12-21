@@ -8,12 +8,16 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     strict: process.env.NODE != 'production',
     state: {
+        catalogSelected: ["-1", "-1", "-1"],
+        parentID: 0,
         catalog_id: 0,
         currentPage: 1,
         tag: 1,
         total: 0,
         list: null,
         catalogs: null,
+        catalogs_index: 0,
+        menu: null
     },
     mutations: {
         getProblems(state, list) {
@@ -23,6 +27,9 @@ export default new Vuex.Store({
             state.tag = tag
             console.log("当前标签", tag)
         },
+        setIndex(state, catalogs_index) {
+            state.catalogs_index = catalogs_index
+        },
         setTotal(state, total) {
             state.total = total
         },
@@ -31,11 +38,26 @@ export default new Vuex.Store({
             state.currentPage = val
         },
         setCatalogs(state, catalogs) {
-            state.catalogs = catalogs
+            if (state.catalogs == null) {
+                state.catalogs = catalogs
+            } else {
+                state.catalogs = state.catalogs.splice(0, state.catalogs_index + 1);
+                state.catalogs.push(catalogs[0]);
+                // console.log(state.catalogs[0])
+            }
         },
         setCatalog_id(state, catalog_id) {
             state.catalog_id = catalog_id
         },
+        setParentID(state, ParentID) {
+            state.ParentID = ParentID
+        },
+        setCatalogSelected(state, catalogSelected) {
+            state.catalogSelected = catalogSelected
+        },
+        getMenus(state, menu) {
+            state.menu = menu
+        }
     },
     actions: {
         async getProblems({ commit, state }) {
@@ -63,35 +85,32 @@ export default new Vuex.Store({
             commit('setPage', val)
             await dispatch('getProblems')
         },
-        async setCatalogs({ commit, dispatch, state }, parentID, index) {
-            let catalogs = state.catalogs
-            let catalog = null
-            if (state.catalogs == null) {
-                let res = await fetch(Server + "/api/catalog/0");
-                catalogs = await res.json();
-                commit('setCatalogs', [catalogs])
-                console.log([catalogs])
-
-            } else {
-                catalog = catalogs.slice()
-                catalog = catalog[0]
-                catalog = catalog.splice(0, index + 1);
-                console.log([catalog])
-
-                let res = await fetch(Server + "/api/catalog/" + parentID);
-                let result = await res.json();
-                console.log(result)
-                if (result.length > 0) {
-                    catalog.push(result);
-                }
-                console.log([catalog])
-                commit('setCatalogs', [catalog])
+        setIndex({ commit }, index) {
+            commit('setIndex', index)
+        },
+        setCatalog_id({ commit }, parentID) {
+            commit('setCatalog_id', parentID)
+        },
+        async setCatalogs({ commit, dispatch, state }, { parentID, index }) {
+            let res = await fetch(Server + "/api/catalog/" + parentID);
+            let result = await res.json();
+            commit('setIndex', index)
+            if (result.length > 0) {
+                commit('setCatalogs', [result])
             }
-
-            // this.catalogs = [catalogs];
+            commit('setParentID', state.catalog_id)
             commit('setCatalog_id', parentID)
             await dispatch('getProblems')
         },
+        async getMenus({ commit, dispatch, state }) {
+            let res = await fetch(Server + "/api/catalog/0");
+            let result = await res.json();
+            commit('getMenus', [result])
+
+        },
+        setCatalogSelected({ commit }, catalogSelected) {
+            commit('setCatalogSelected', catalogSelected)
+        }
     },
     getters: {
         count(state) {

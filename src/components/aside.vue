@@ -1,19 +1,16 @@
 <!--  -->
 <template>
   <el-menu :default-openeds="['1','3']">
-    <el-submenu :index="menu.index" v-for="menu in menus" :key="menu.id">
+    <el-submenu index="1">
       <template slot="title">
-        <router-link :to="{name:'set',params:{}}">
-          <i :class="[menu.icon]"></i>
-          {{menu.title}}
-        </router-link>
+        <i class="el-icon-menu"></i>
+        题库管理
       </template>
       <el-menu-item-group>
         <el-menu-item
-          :index="child.index"
-          v-if="menu.type=='sub'"
-          v-for="child in menu.children"
-          :key="child.id"
+          v-for="child in menus"
+          :key="child.ID"
+          @click="catalog_change(child.ID)"
         >{{child.title}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -21,67 +18,60 @@
 </template>
 
 <script>
+import { mapActions, mapState } from "vuex";
+
 export default {
   data() {
     return {
-      menus: [
-        {
-          index: "1",
-          type: "sub",
-          icon: "el-icon-menu",
-          title: "题库集合",
-          children: [
-            {
-              index: "1-1",
-              to: { name: "set", params: {} },
-              title: "C语言"
-            },
-            {
-              index: "1-2",
-              to: { name: "set", params: {} },
-              title: "数据结构"
-            },
-            {
-              index: "1-3",
-              to: { name: "set", params: {} },
-              title: "java"
-            }
-          ]
-        },
-        {
-          index: "2",
-          type: "sub",
-          icon: "el-icon-menu",
-          title: "我的题库",
-          children: [
-            {
-              index: "1-1",
-              to: { name: "set", params: {} },
-              title: "C语言"
-            },
-            {
-              index: "1-2",
-              to: { name: "set", params: {} },
-              title: "数据结构"
-            },
-            {
-              index: "1-3",
-              to: { name: "set", params: {} },
-              title: "java"
-            }
-          ]
-        },
-        {
-          index: "3",
-          type: "sub",
-          icon: "el-icon-setting",
-          title: "题库设置"
-        }
-      ]
+      menus: []
     };
   },
+  computed: {
+    ...mapState([
+      "menu",
+      "total",
+      "list",
+      "catalogs",
+      "catalog_id",
+      "catalogs_index",
+      "catalogSelected"
+    ])
+  },
+  methods: {
+    async catalog_change(ID) {
+      // let parentID = this.$refs["catalog"][index].value;
+      // let pID = 0;
+      // if (index > 0) {
+      //   pID = this.$refs["catalog"][index - 1].value;
+      //   this.setIndex(this.catalogs_index - 1);
+      // }
+      // if (parentID == -1) {
+      //   this.setCatalogs({ parentID: pID, index: this.catalogs_index });
+      //   this.getProblems();
+      //   return;
+      // }
+      // this.setIndex(1);
+      this.setCatalogSelected(ID);
+      console.log(this.catalogSelected);
+      this.setCatalogs({ parentID: ID, index: 0 });
+    },
+    ...mapActions([
+      "setCatalogSelected",
+      "getProblems",
+      "setTag",
+      "setCatalogs",
+      "setPage",
+      "setCatalog_id",
+      "setIndex",
+      "getMenus"
+    ])
+  },
+
   //生命周期 - 创建完成（访问当前this实例）
-  created() {},
+  async created() {
+    await this.getMenus();
+    this.menus = this.menu[0];
+  },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}
 };

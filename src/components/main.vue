@@ -95,7 +95,7 @@ export default {
         pro: 24,
         pri: 0
       },
-      catalog_id: 0,
+      // catalog_id: 0,
       currentPage: 1,
       tag: 1,
       pri_problem: [],
@@ -122,26 +122,19 @@ export default {
     },
     async catalog_change(index) {
       let parentID = this.$refs["catalog"][index].value;
-
+      let pID = 0;
+      if (index > 0) {
+        pID = this.$refs["catalog"][index - 1].value;
+        this.setIndex(this.catalogs_index - 1);
+      }
       if (parentID == -1) {
-        this.catalog_id = 0;
+        this.setCatalogs({ parentID: pID, index: this.catalogs_index });
         this.getProblems();
         return;
       }
-      // this.catalog_id = parentID;
-      // console.log(this.catalogs);
-      // this.catalogs = this.catalogs.splice(0, index + 1);
-      // console.log(index);
-      // console.log(this.catalogs);
-
-      // let res = await fetch(Server + "/api/catalog/" + parentID);
-      // let result = await res.json();
-
-      // if (result.length > 0) {
-      //   this.catalogs.push(result);
-      // }
-      this.setCatalogs(parentID, index);
-      this.getProblemList();
+      this.setIndex(this.catalogs_index - 1);
+      this.setCatalogs({ parentID: parentID, index: index });
+      this.getProblems();
     },
     problemPriview(id) {
       this.priview.pro = 15;
@@ -157,45 +150,42 @@ export default {
       this.currentPage = val;
       this.getProblemList();
     },
-    async getProblemList() {
-      let pro = await fetch(
-        Server +
-          "/api/getProblemList/" +
-          this.catalog_id +
-          "&" +
-          this.tag +
-          "&" +
-          this.currentPage
-      );
-      // console.log(this.problems);
-      let problems = await pro.json();
-      this.problems = problems.data;
-      this.pages.total = problems.total;
-    },
-    ...mapActions(["getProblems", "setTag", "setCatalogs", "setPage"])
+    ...mapActions([
+      "setCatalogSelected",
+      "getProblems",
+      "setTag",
+      "setCatalogs",
+      "setPage",
+      "setCatalog_id",
+      "setIndex"
+    ])
   },
   watch: {},
   computed: {
-    ...mapState(["total", "list", "catalogs"]),
+    ...mapState([
+      "total",
+      "list",
+      "catalogs",
+      "catalog_id",
+      "catalogs_index",
+      "catalogSelected"
+    ]),
     ...mapState({
       stateproblems: state => state.problems.list
-    })
+    }),
+    getVal: {
+      get() {
+        return this.$store.state.catalogSelected;
+      },
+      set(newVal) {
+        this.$store.dipatch("setCatalogSelected", newVal);
+        // this.$store.commit("setCatalogSelected", newVal);
+      }
+    }
   },
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
-    // let res = await fetch(Server + "/api/catalog/0");
-    // let catalogs = await res.json();
-
-    // let pro = await fetch(Server + "/api/getProblemList");
-    // let problems = await pro.json();
-
-    // this.catalogs = [catalogs];
-    // this.problems = problems.data;
-    this.setCatalogs(0, 0);
-    this.getProblems();
-    // this.pages.total = problems.total;
-    // console.log(problems.data);
-    // console.log(this.tableData);
+    await this.setCatalogs({ parentID: 0, index: 0 });
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}
