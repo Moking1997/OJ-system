@@ -27,7 +27,8 @@ export default {
     Header,
     Main,
     Aside
-  }
+  },
+  async created() {}
 };
 </script>
 

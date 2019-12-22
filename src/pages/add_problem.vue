@@ -4,7 +4,7 @@
     <el-button type="primary">新建题目</el-button>
     <form ref="form1" method="post" enctype="multipart/form-data">
       标题:
-      <el-input v-model="problem.title" name="title"></el-input>
+      <el-input v-model="problem.title" name="title"></el-input>是否设置陷阱
       <br />
       <br />分类:
       <el-input v-model="problem.catalogs" name="catalogs"></el-input>
@@ -28,7 +28,9 @@
       <br />
       <br />输出样例:
       <el-input v-model="problem.sample_output" name="sample_output" placeholder="输出样例"></el-input>
-      <br />
+      <br />对应分值
+      标记
+      <el-button type="primary">add</el-button>
       <br />
       <el-button type="primary" @click="issueProblem()">发布</el-button>
     </form>

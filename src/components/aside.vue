@@ -51,7 +51,7 @@ export default {
       //   return;
       // }
       // this.setIndex(1);
-      this.setCatalogSelected(ID);
+      this.setCatalogSelected({ index: 0, catalogSelected: ID });
       console.log(this.catalogSelected);
       this.setCatalogs({ parentID: ID, index: 0 });
     },

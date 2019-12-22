@@ -52,8 +52,8 @@ export default new Vuex.Store({
         setParentID(state, ParentID) {
             state.ParentID = ParentID
         },
-        setCatalogSelected(state, catalogSelected) {
-            state.catalogSelected = catalogSelected
+        setCatalogSelected(state, { index, catalogSelected }) {
+            state.catalogSelected[index] = catalogSelected
         },
         getMenus(state, menu) {
             state.menu = menu
@@ -108,8 +108,8 @@ export default new Vuex.Store({
             commit('getMenus', [result])
 
         },
-        setCatalogSelected({ commit }, catalogSelected) {
-            commit('setCatalogSelected', catalogSelected)
+        setCatalogSelected({ commit }, { index, catalogSelected }) {
+            commit('setCatalogSelected', { index: index, catalogSelected: catalogSelected })
         }
     },
     getters: {

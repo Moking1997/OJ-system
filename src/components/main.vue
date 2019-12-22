@@ -10,6 +10,7 @@
                 v-for="catalog,index in catalogs"
                 :key="catalog.ID"
                 ref="catalog"
+                v-model="catalogSelected[index]"
                 @change="catalog_change(index)"
               >
                 <option value="-1">请选择</option>
@@ -118,7 +119,7 @@ export default {
       }
       this.tag = tag;
       this.setTag(tag);
-      this.getProblemList();
+      this.getProblems();
     },
     async catalog_change(index) {
       let parentID = this.$refs["catalog"][index].value;
@@ -132,7 +133,8 @@ export default {
         this.getProblems();
         return;
       }
-      this.setIndex(this.catalogs_index - 1);
+
+      this.setCatalogSelected({ index: index, catalogSelected: parentID });
       this.setCatalogs({ parentID: parentID, index: index });
       this.getProblems();
     },
@@ -173,13 +175,13 @@ export default {
     ...mapState({
       stateproblems: state => state.problems.list
     }),
-    getVal: {
+    test: {
       get() {
         return this.$store.state.catalogSelected;
       },
-      set(newVal) {
-        this.$store.dipatch("setCatalogSelected", newVal);
-        // this.$store.commit("setCatalogSelected", newVal);
+      set(val) {
+        console.log(val);
+        // this.$store.commit("catalogSelected", val);
       }
     }
   },

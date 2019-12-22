@@ -1,6 +1,7 @@
 const Router = require('koa-router')
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
+const fs = require('fs');
 
 const sequelize = new Sequelize('jol', 'root', '123456', {
     host: 'localhost',
@@ -149,10 +150,29 @@ router.get('/getProblemList/:date', async ctx => {
 router.post('/issue', async ctx => {
     // console.log(ctx.request.body)
     // console.log(ctx.request.files)
+    ctx.body = ctx.request.fields
+    // console.log(ctx.request.fields)
+    let { title, catalogs, tags, sample_input, sample_output } = ctx.request.fields
+    // console.log(title, catalogs, tags, contents)
+    // Article.create({ title: title, catalogs: catalogs, tags: tags, content: contents })
     console.log(ctx.request.fields)
-    let { title, catalogs, tags, contents } = ctx.request.fields
-    console.log(title, catalogs, tags, contents)
-    Article.create({ title: title, catalogs: catalogs, tags: tags, content: contents })
+
+
+    fs.mkdir("upload/" + title, function (err) {
+        if (err) {
+            return console.error(err);
+        }
+        console.log("目录创建成功。");
+    });
+    fs.writeFile('./upload/' + title + "/" + tags + ".in", sample_input, function (err) {
+        if (err) {
+            console.log("文件写入失败", err)
+        } else {
+            console.log("文件写入成功");
+
+        }
+
+    })
     ctx.response.body = 'success'
 })
 
