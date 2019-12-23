@@ -7,7 +7,9 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
     strict: process.env.NODE != 'production',
+    // strict: false,
     state: {
+
         catalogSelected: ["-1", "-1", "-1"],
         parentID: 0,
         catalog_id: 0,

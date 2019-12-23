@@ -6,6 +6,9 @@
         <el-header style="text-align: left; font-size: 12px; height:63px;">
           <el-row type="flex" justify="space-between">
             <el-col :span="12">
+              <select>
+                <option v-for="item in menus" :value="item.ID">{{item.title}}</option>
+              </select>
               <select
                 v-for="catalog,index in catalogs"
                 :key="catalog.ID"
@@ -87,6 +90,7 @@ export default {
       passing_rate: 0.27
     };
     return {
+      menus: null,
       pages: {
         limit: 10,
         total: 0
@@ -159,12 +163,14 @@ export default {
       "setCatalogs",
       "setPage",
       "setCatalog_id",
-      "setIndex"
+      "setIndex",
+      "getMenus"
     ])
   },
   watch: {},
   computed: {
     ...mapState([
+      "menu",
       "total",
       "list",
       "catalogs",
@@ -188,6 +194,8 @@ export default {
   //生命周期 - 创建完成（访问当前this实例）
   async created() {
     await this.setCatalogs({ parentID: 0, index: 0 });
+    await this.getMenus();
+    this.menus = this.menu[0];
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}
