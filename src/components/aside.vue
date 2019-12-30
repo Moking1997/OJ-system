@@ -14,6 +14,9 @@
         >{{child.title}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
+    <el-menu-item>
+      <router-link to="admin">管理</router-link>
+    </el-menu-item>
   </el-menu>
 </template>
 

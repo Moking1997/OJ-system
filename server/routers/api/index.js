@@ -64,6 +64,9 @@ const Catalog = sequelize.define('problem_catalogs', {
     title: {
         type: Sequelize.STRING
     },
+    label: {
+        type: Sequelize.STRING
+    },
     parentID: {
         type: Sequelize.STRING
     }
@@ -96,11 +99,37 @@ router.get('/problem/data/:data', async ctx => {
     ctx.body = await Problem.findAll({ where: { title: { [Op.like]: `%${data}%` } } })
 
 })
+let tree = []
+getTree = async (id) => {
+    let data = await Catalog.findAll({ where: { parentID: 0 } })
+    data.forEach(async element => {
+        let children = await Catalog.findAll({ where: { parentID: element.dataValues.ID } })
+        children.forEach(item => {
+            element.dataValues.children = item.dataValues
+        })
+        // console.log(element.dataValues)
+    });
+    // console.log(data)
+    return data
+}
+tree = getTree(0)
+router.get('/getTree', async ctx => {
+    let data = await Catalog.findAll({ where: { parentID: 0 } })
+    data.forEach(async element => {
+        let children = await Catalog.findAll({ where: { parentID: element.dataValues.ID } })
+        children.forEach(item => {
+            element.dataValues.children = item.dataValues
+        })
+        // console.log(element.dataValues)
+    });
+    console.log(getTree(0))
+    ctx.body = tree
+})
 router.get('/getProblemList', async ctx => {
     console.log(ctx.request.query)
     // ctx.body = await Catalog.findAll()
     let { currentPage = 1 } = ctx.request.query
-    let offset = (currentPage - 1) * 10;
+    let offset = (currentPage - 1) * 10
     let userList = await Problem.findAndCountAll({
         // where: {
         // },

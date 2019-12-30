@@ -4,6 +4,7 @@ import Index from '@/pages/index'
 import Add_problem from '@/pages/add_problem'
 import Problem from '@/pages/problem'
 import Set from '@/pages/set'
+import Admin from '@/pages/admin'
 
 Vue.use(Router)
 
@@ -18,6 +19,11 @@ export default new Router({
       path: '/set',
       name: 'set',
       component: Set
+    },
+    {
+      path: '/admin',
+      name: 'admin',
+      component: Admin
     },
     {
       path: '/add_problem',
