@@ -1,12 +1,13 @@
 <!--  -->
 <template>
   <div class="custom-tree-container">
+    <el-button @click="getTree()">1</el-button>
     <div class="block">
       <p>使用 scoped slot</p>
       <!-- {{data}} -->
       <br />
-      <input type="text" v-model="tree" />
-      {{tree}}
+      <!-- {{tree}} -->
+      {{test}}
       <el-tree
         :data="tree"
         show-checkbox
@@ -27,10 +28,6 @@
 </template>
 
 <script>
-import { eachSeries } from "async";
-let id = 1000;
-let ID = 1000;
-
 export default {
   data() {
     const data = [
@@ -70,50 +67,31 @@ export default {
       node.children = children;
       return children;
     },
-    async getTree() {
-      let child = await fetch("http://localhost:8088/api/catalog/" + 0);
-      let children = await child.json();
-      // await children.forEach(async element => {
-      //   let res = await fetch("http://localhost:8088/api/catalog/" + 1);
-      //   let r = res.json();
-      //   element.children = "r";
-      //   console.log("element", element);
-      // });
-      async function red(children) {
-        for (const item of children) {
-          let res = await fetch("http://localhost:8088/api/catalog/" + 1);
-          let r = res.json();
-          item.children = "r";
-          console.log(item);
-        }
-      }
-
-      eachSeries(children, err => {
-        // let res = fetch("http://localhost:8088/api/catalog/" + 1);
-        // let r = res.json();
-        children.children = "r";
+    getTree() {
+      this.tree.forEach(element => {
+        element.te = "ee";
       });
-
-      console.log("children", children);
-      this.tree = children;
-      // return children;
+      console.log(this.tree);
     }
   },
   watch: {
-    tree(val) {
-      this.value = val;
-    }
+    tree: {}
   },
-  async created() {
-    // let res = await fetch("http://localhost:8088/api/catalog/0");
-    // let tree = await res.json();
-    this.getTree();
-    // await tree.forEach(async element => {
-    //   await this.getChildren(element, element.ID);
-    //   console.log("element.children", element.children);
-    // });
-    // this.tree = await tree;
-    // console.log("tree", this.tree);
+  async created() {},
+  computed: {
+    test() {
+      
+        let res = await fetch("http://localhost:8088/api/catalog/0");
+        let t = await res.json();
+        t.forEach(async element => {
+          let data = await fetch("http://localhost:8088/api/catalog/" + 1);
+          let children = await data.json();
+          element.children = children;
+        });
+        console.log(t);
+        return t;
+      }
+    
   }
 };
 </script>
