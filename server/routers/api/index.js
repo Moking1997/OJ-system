@@ -87,6 +87,16 @@ router.get('/problem/catalog/:id', async ctx => {
     let { id } = ctx.params
     ctx.body = await Problem.findAll({ where: { catalogs: { [Op.like]: `%,${id},%` } } })
 })
+router.post('/problem/catalog/add/id', async ctx => {
+    let { label, parentID } = ctx.request.fields
+    Catalog.create({ label: label, parentID: parentID })
+    ctx.response = 'success'
+})
+router.post('/problem/catalog/delete/id', async ctx => {
+    let { id } = ctx.request.fields
+    Catalog.destroy({ where: { ID: id } })
+    ctx.response = 'success'
+})
 router.get('/problem', async ctx => {
     ctx.body = await Problem.findAll()
 })
@@ -99,35 +109,8 @@ router.get('/problem/data/:data', async ctx => {
     ctx.body = await Problem.findAll({ where: { title: { [Op.like]: `%${data}%` } } })
 
 })
-let tree = []
-getTree = async (id) => {
-    let data = await Catalog.findAll({ where: { parentID: 0 } })
-    data.forEach(async element => {
-        let children = await Catalog.findAll({ where: { parentID: element.dataValues.ID } })
-        children.forEach(item => {
-            element.dataValues.children = item.dataValues
-        })
-        // console.log(element.dataValues)
-    });
-    // console.log(data)
-    return data
-}
-tree = getTree(0)
-router.get('/getTree', async ctx => {
-    let data = await Catalog.findAll({ where: { parentID: 0 } })
-    data.forEach(async element => {
-        let children = await Catalog.findAll({ where: { parentID: element.dataValues.ID } })
-        children.forEach(item => {
-            element.dataValues.children = item.dataValues
-        })
-        // console.log(element.dataValues)
-    });
-    console.log(getTree(0))
-    ctx.body = tree
-})
 router.get('/getProblemList', async ctx => {
     console.log(ctx.request.query)
-    // ctx.body = await Catalog.findAll()
     let { currentPage = 1 } = ctx.request.query
     let offset = (currentPage - 1) * 10
     let userList = await Problem.findAndCountAll({
@@ -161,8 +144,6 @@ router.get('/getProblemList/:date', async ctx => {
     let id = (ctx.params['date']).split("&")[0]
     let tag = (ctx.params['date']).split("&")[1]
     let currentPage = (ctx.params['date']).split("&")[2] || '1'
-    // console.log(ctx.request.query)
-    // ctx.body = await Catalog.findAll()
     let offset = (currentPage - 1) * 10;
     let userList = await Problem.findAndCountAll({
         where: { catalogs: { [Op.like]: `%,${id},%` }, tag: tag },
@@ -177,16 +158,11 @@ router.get('/getProblemList/:date', async ctx => {
     ctx.body = userList;
 })
 router.post('/issue', async ctx => {
-    // console.log(ctx.request.body)
-    // console.log(ctx.request.files)
     ctx.body = ctx.request.fields
-    // console.log(ctx.request.fields)
     let { title, catalogs, tags, sample_input, sample_output } = ctx.request.fields
     // console.log(title, catalogs, tags, contents)
     // Article.create({ title: title, catalogs: catalogs, tags: tags, content: contents })
     console.log(ctx.request.fields)
-
-
     fs.mkdir("upload/" + title, function (err) {
         if (err) {
             return console.error(err);

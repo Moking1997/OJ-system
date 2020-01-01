@@ -1,13 +1,9 @@
 <!--  -->
 <template>
   <div class="custom-tree-container">
-    <el-button @click="getTree()">1</el-button>
     <div class="block">
-      <p>使用 scoped slot</p>
-      <!-- {{data}} -->
-      <br />
+      <el-button type="primary" @click="append({ID:0})">添加根节点</el-button>
       <!-- {{tree}} -->
-      {{tree}}
       <el-tree
         :data="tree"
         show-checkbox
@@ -18,8 +14,8 @@
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label}}</span>
           <span>
-            <el-button type="text" size="mini" @click="() => append(data)">Append</el-button>
-            <el-button type="text" size="mini" @click="() => remove(node, data)">Delete</el-button>
+            <el-button type="text" size="mini" @click="() => append(data)">添加</el-button>
+            <el-button type="text" size="mini" @click="() => remove(data)">删除</el-button>
           </span>
         </span>
       </el-tree>
@@ -28,38 +24,74 @@
 </template>
 
 <script>
+let id = 10;
 import axios from "axios";
 export default {
   data() {
-    const data = [
-      {
-        id: 1,
-        label: "数据结构",
-        parentID: 0,
-        children: [{ id: 11, label: "数据结构", parentID: 0 }]
-      },
-      { id: 2, label: "C语言", parentID: 0 },
-      { id: 3, label: "Java", parentID: 0 }
-    ];
     return {
-      tree: [{ index: "index" }]
+      tree: []
     };
   },
 
   methods: {
     append(data) {
-      const newChild = { id: id++, label: "testtest", children: [] };
-      if (!data.children) {
-        this.$set(data, "children", []);
-      }
-      data.children.push(newChild);
+      this.$prompt("请输入知识点名称", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        inputErrorMessage: "输入格式不正确"
+      })
+        .then(({ value }) => {
+          this.$message({
+            type: "success",
+            message: "你的内容是: " + value
+          });
+          this.addNode(data.ID, value);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "取消输入"
+          });
+        });
     },
-
-    remove(node, data) {
-      const parent = node.parent;
-      const children = parent.data.children || parent.data;
-      const index = children.findIndex(d => d.id === data.id);
-      children.splice(index, 1);
+    async addNode(parentID, label) {
+      let data = new FormData();
+      data.append("parentID", parentID);
+      data.append("label", label);
+      await axios
+        .post("http://localhost:8088/api/problem/catalog/add/id", data)
+        .then(res => {
+          console.log("res=>", res);
+        });
+    },
+    async removeNode(id) {
+      let data = new FormData();
+      data.append("id", id);
+      await axios
+        .post("http://localhost:8088/api/problem/catalog/delete/id", data)
+        .then(res => {
+          console.log("res=>", res);
+        });
+    },
+    remove(data) {
+      this.$confirm("此操作将永久删除该文件, 是否继续?", "提示", {
+        confirmButtonText: "确定",
+        cancelButtonText: "取消",
+        type: "warning"
+      })
+        .then(() => {
+          this.$message({
+            type: "success",
+            message: "删除成功!"
+          });
+          this.removeNode(data.ID);
+        })
+        .catch(() => {
+          this.$message({
+            type: "info",
+            message: "已取消删除"
+          });
+        });
     },
     async getChildren(node, id) {
       let child = await fetch("http://localhost:8088/api/catalog/" + id);
@@ -68,27 +100,32 @@ export default {
       node.children = children;
       return children;
     },
-    async getTree(id) {
+    async getTree(element) {
       try {
-        let res = await axios.get("http://localhost:8088/api/catalog/" + "id");
-        // console.log(res);
-        return res.data;
+        let res = await axios.get(
+          "http://localhost:8088/api/catalog/" + element.ID
+        );
+        let children = res.data;
+        this.$set(element, "children", children);
+
+        if (children.length != 0) {
+          element.children.forEach(async element => {
+            this.getTree(element);
+          });
+        }
       } catch (err) {
         console.log(err);
         alert("请求出错！");
       }
     },
     //使用 asyns/await
-    async getHistoryData() {
+    async getTreeHead() {
       try {
         let res = await axios.get("http://localhost:8088/api/catalog/0");
         this.tree = res.data;
-        this.tree.forEach(element => {
-          console.log("element", element);
-          element.children = "element";
+        this.tree.forEach(async element => {
+          this.getTree(element);
         });
-        this.getTree(1);
-        console.log(this.tree[0].ID);
       } catch (err) {
         console.log(err);
         alert("请求出错！");
@@ -96,7 +133,7 @@ export default {
     }
   },
   async created() {
-    await this.getHistoryData();
+    await this.getTreeHead();
     console.log("start");
   },
   computed: {}
