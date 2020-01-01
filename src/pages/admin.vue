@@ -7,7 +7,7 @@
       <!-- {{data}} -->
       <br />
       <!-- {{tree}} -->
-      {{test}}
+      {{tree}}
       <el-tree
         :data="tree"
         show-checkbox
@@ -28,6 +28,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   data() {
     const data = [
@@ -41,7 +42,7 @@ export default {
       { id: 3, label: "Java", parentID: 0 }
     ];
     return {
-      tree: []
+      tree: [{ index: "index" }]
     };
   },
 
@@ -67,32 +68,38 @@ export default {
       node.children = children;
       return children;
     },
-    getTree() {
-      this.tree.forEach(element => {
-        element.te = "ee";
-      });
-      console.log(this.tree);
+    async getTree(id) {
+      try {
+        let res = await axios.get("http://localhost:8088/api/catalog/" + "id");
+        // console.log(res);
+        return res.data;
+      } catch (err) {
+        console.log(err);
+        alert("请求出错！");
+      }
+    },
+    //使用 asyns/await
+    async getHistoryData() {
+      try {
+        let res = await axios.get("http://localhost:8088/api/catalog/0");
+        this.tree = res.data;
+        this.tree.forEach(element => {
+          console.log("element", element);
+          element.children = "element";
+        });
+        this.getTree(1);
+        console.log(this.tree[0].ID);
+      } catch (err) {
+        console.log(err);
+        alert("请求出错！");
+      }
     }
   },
-  watch: {
-    tree: {}
+  async created() {
+    await this.getHistoryData();
+    console.log("start");
   },
-  async created() {},
-  computed: {
-    test() {
-      
-        let res = await fetch("http://localhost:8088/api/catalog/0");
-        let t = await res.json();
-        t.forEach(async element => {
-          let data = await fetch("http://localhost:8088/api/catalog/" + 1);
-          let children = await data.json();
-          element.children = children;
-        });
-        console.log(t);
-        return t;
-      }
-    
-  }
+  computed: {}
 };
 </script>
 
