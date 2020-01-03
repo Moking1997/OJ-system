@@ -1,7 +1,9 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import Problem from './problem'
+import User from './user'
 import { Server } from "@/config";
+import axios from "axios";
 
 Vue.use(Vuex)
 
@@ -9,7 +11,7 @@ export default new Vuex.Store({
     strict: process.env.NODE != 'production',
     // strict: false,
     state: {
-
+        tree: [],
         catalogSelected: ["-1", "-1", "-1"],
         parentID: 0,
         catalog_id: 0,
@@ -57,8 +59,14 @@ export default new Vuex.Store({
         setCatalogSelected(state, { index, catalogSelected }) {
             state.catalogSelected[index] = catalogSelected
         },
+        setSelected(state, catalogSelected) {
+            state.catalogSelected = catalogSelected
+        },
         getMenus(state, menu) {
             state.menu = menu
+        },
+        getTree(state, tree) {
+            state.tree = tree
         }
     },
     actions: {
@@ -73,7 +81,6 @@ export default new Vuex.Store({
                 state.currentPage
             );
             let problems = await pro.json();
-
             let list = problems.data
             let total = problems.total
             commit('setTotal', total)
@@ -112,7 +119,37 @@ export default new Vuex.Store({
         },
         setCatalogSelected({ commit }, { index, catalogSelected }) {
             commit('setCatalogSelected', { index: index, catalogSelected: catalogSelected })
-        }
+        },
+        setSelected({ commit }, catalogSelected) {
+            commit('setSelected', catalogSelected)
+        },
+        async getTree({ commit }) {
+            let res = await axios.get("http://localhost:8088/api/catalog/0");
+            let tree = res.data;
+
+            async function readTree(element) {
+                try {
+                    let res = await axios.get(
+                        "http://localhost:8088/api/catalog/" + element.ID
+                    );
+                    let children = res.data;
+                    // this.$set(element, "children", children);
+                    element.children = children
+                    if (children.length != 0) {
+                        element.children.forEach(async element => {
+                            readTree(element);
+                        });
+                    }
+                } catch (err) {
+                    console.log(err);
+                    alert("请求出错！");
+                }
+            }
+            tree.forEach(async element => {
+                readTree(element);
+            });
+            commit('getTree', tree)
+        },
     },
     getters: {
         count(state) {
@@ -121,5 +158,6 @@ export default new Vuex.Store({
     },
     modules: {
         problems: Problem,
+        user: User,
     }
 })

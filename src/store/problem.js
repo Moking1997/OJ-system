@@ -4,5 +4,7 @@ export default {
         currentPage: 1,
         tag: 1,
         list: null
-    }
+    },
+    mutations: {},
+    actions: {}
 }

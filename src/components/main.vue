@@ -1,6 +1,7 @@
 <!--  -->
 <template>
   <el-row>
+    <el-button @click="setList([{id:222,name:111,pass:'www'}])">ce</el-button>
     <el-col :span="priview.pro">
       <el-container>
         <el-header style="text-align: left; font-size: 12px; height:63px;">
@@ -13,7 +14,7 @@
                 v-for="catalog,index in catalogs"
                 :key="catalog.ID"
                 ref="catalog"
-                v-model="catalogSelected[index]"
+                v-model="Selected[index]"
                 @change="catalog_change(index)"
               >
                 <option value="-1">请选择</option>
@@ -81,16 +82,9 @@ export default {
     Priview
   },
   data() {
-    const item = {
-      date: "1000",
-      name: "求m到n之和",
-      score: 10,
-      pass: 10564,
-      submit: 30212,
-      passing_rate: 0.27
-    };
     return {
       menus: null,
+      Selected: ["-1", "-1", "-1"],
       pages: {
         limit: 10,
         total: 0
@@ -100,12 +94,10 @@ export default {
         pro: 24,
         pri: 0
       },
-      // catalog_id: 0,
       currentPage: 1,
       tag: 1,
       pri_problem: [],
       activeName: "first",
-      // catalogs: [],
       problems: []
     };
   },
@@ -164,10 +156,20 @@ export default {
       "setPage",
       "setCatalog_id",
       "setIndex",
-      "getMenus"
+      "getMenus",
+      "setList"
     ])
   },
-  watch: {},
+  watch: {
+    Selected: function() {
+      console.log(this.Selected);
+    },
+    watchSelected(curVal, oldVal) {
+      this.Selected = this.catalogSelected;
+      console.log(this.catalogSelected);
+    }
+  },
+
   computed: {
     ...mapState([
       "menu",
@@ -181,14 +183,8 @@ export default {
     ...mapState({
       stateproblems: state => state.problems.list
     }),
-    test: {
-      get() {
-        return this.$store.state.catalogSelected;
-      },
-      set(val) {
-        console.log(val);
-        // this.$store.commit("catalogSelected", val);
-      }
+    watchSelected() {
+      return this.$store.state.catalogSelected;
     }
   },
   //生命周期 - 创建完成（访问当前this实例）
@@ -196,6 +192,8 @@ export default {
     await this.setCatalogs({ parentID: 0, index: 0 });
     await this.getMenus();
     this.menus = this.menu[0];
+    // this.Selected = this.catalogSelected;
+    console.log(this.catalogSelected);
   },
   //生命周期 - 挂载完成（访问DOM元素）
   mounted() {}

@@ -85,6 +85,9 @@ export default {
         name: "problem",
         params: {
           id: this.pri_problem
+        },
+        query: {
+          id: this.pri_problem.problem_id
         }
       });
     }

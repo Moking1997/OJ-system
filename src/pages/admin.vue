@@ -2,14 +2,23 @@
 <template>
   <div class="custom-tree-container">
     <div class="block">
-      <el-button type="primary" @click="append({ID:0})">添加根节点</el-button>
+      <el-row type="flex" justify="space-between">
+        <el-col :span="18">
+          <el-input placeholder="输入关键字进行过滤" v-model="filterText"></el-input>
+        </el-col>
+        <el-col :span="6" style="text-align:right">
+          <el-button type="primary" @click="append({ID:0})">添加根节点</el-button>
+        </el-col>
+      </el-row>
+      <br />
       <!-- {{tree}} -->
       <el-tree
         :data="tree"
-        show-checkbox
         node-key="ID"
         default-expand-all
+        :filter-node-method="filterNode"
         :expand-on-click-node="false"
+        ref="tree"
       >
         <span class="custom-tree-node" slot-scope="{ node, data }">
           <span>{{ node.label}}</span>
@@ -24,16 +33,25 @@
 </template>
 
 <script>
-let id = 10;
 import axios from "axios";
+
 export default {
   data() {
     return {
-      tree: []
+      tree: [],
+      filterText: ""
     };
   },
-
+  watch: {
+    filterText(val) {
+      this.$refs.tree.filter(val);
+    }
+  },
   methods: {
+    filterNode(value, data) {
+      if (!value) return true;
+      return data.label.indexOf(value) !== -1;
+    },
     append(data) {
       this.$prompt("请输入知识点名称", "提示", {
         confirmButtonText: "确定",
@@ -92,13 +110,6 @@ export default {
             message: "已取消删除"
           });
         });
-    },
-    async getChildren(node, id) {
-      let child = await fetch("http://localhost:8088/api/catalog/" + id);
-      let children = await child.json();
-      console.log(children);
-      node.children = children;
-      return children;
     },
     async getTree(element) {
       try {
