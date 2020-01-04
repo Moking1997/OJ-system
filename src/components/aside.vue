@@ -10,7 +10,7 @@
         <el-menu-item
           v-for="child in menus"
           :key="child.ID"
-          @click="catalog_change(child.ID)"
+          @click="catalog_change(child)"
         >{{child.title}}</el-menu-item>
       </el-menu-item-group>
     </el-submenu>
@@ -42,15 +42,6 @@
       ref="drawer"
     >
       <div class="demo-drawer__content">
-        <!-- {{this.tree}} -->
-        <!-- <div class="demo-drawer__footer">
-          <el-button @click="cancelForm">取 消</el-button>
-          <el-button
-            type="primary"
-            @click="$refs.drawer.closeDrawer()"
-            :loading="loading"
-          >{{ loading ? '提交中 ...' : '确 定' }}</el-button>
-        </div>-->
         <el-tree
           :data="tree"
           node-key="ID"
@@ -100,7 +91,8 @@ export default {
       "catalogs",
       "catalog_id",
       "catalogs_index",
-      "catalogSelected"
+      "catalogSelected",
+      "catalogsName"
     ])
   },
   methods: {
@@ -139,7 +131,10 @@ export default {
       this.dialog = false;
       clearTimeout(this.timer);
     },
-    async catalog_change(ID) {
+    async catalog_change(item) {
+      this.setCatalogsName(item.title)
+      let ID = item.ID
+      console.log(item.title)
       this.setCatalogSelected({ index: 0, catalogSelected: ID });
       // console.log(this.catalogSelected);
       this.setCatalogs({ parentID: ID, index: 0 });
@@ -153,7 +148,8 @@ export default {
       "setPage",
       "setCatalog_id",
       "setIndex",
-      "getMenus"
+      "getMenus",
+      "setCatalogsName"
     ])
   },
 

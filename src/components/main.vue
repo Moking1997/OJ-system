@@ -1,15 +1,13 @@
 <!--  -->
 <template>
   <el-row>
-    <el-button @click="setList([{id:222,name:111,pass:'www'}])">ce</el-button>
     <el-col :span="priview.pro">
       <el-container>
+
         <el-header style="text-align: left; font-size: 12px; height:63px;">
           <el-row type="flex" justify="space-between">
             <el-col :span="12">
-              <select>
-                <option v-for="item in menus" :value="item.ID">{{item.title}}</option>
-              </select>
+              <span class="catalogsName"> {{catalogsName}} /</span>
               <select
                 v-for="catalog,index in catalogs"
                 :key="catalog.ID"
@@ -178,7 +176,8 @@ export default {
       "catalogs",
       "catalog_id",
       "catalogs_index",
-      "catalogSelected"
+      "catalogSelected",
+      "catalogsName"
     ]),
     ...mapState({
       stateproblems: state => state.problems.list
@@ -248,5 +247,9 @@ select {
 
 select:focus {
   outline: none;
+}
+.catalogsName{
+  font-size:16px;
+  color: #409eff;
 }
 </style>

@@ -21,11 +21,15 @@ export default new Vuex.Store({
         list: null,
         catalogs: null,
         catalogs_index: 0,
-        menu: null
+        menu: null,
+        catalogsName:"",
     },
     mutations: {
         getProblems(state, list) {
             state.list = list
+        },
+        setCatalogsName(state, name) {
+            state.catalogsName = name
         },
         setTag(state, tag) {
             state.tag = tag
@@ -122,6 +126,9 @@ export default new Vuex.Store({
         },
         setSelected({ commit }, catalogSelected) {
             commit('setSelected', catalogSelected)
+        },
+        setCatalogsName({commit}, name) {
+            commit('setCatalogsName', name)
         },
         async getTree({ commit }) {
             let res = await axios.get("http://localhost:8088/api/catalog/0");
