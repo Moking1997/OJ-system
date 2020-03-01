@@ -3,16 +3,14 @@
   <el-row>
     <el-col :span="priview.pro">
       <el-container>
-
         <el-header style="text-align: left; font-size: 12px; height:63px;">
           <el-row type="flex" justify="space-between">
             <el-col :span="12">
-              <span class="catalogsName"> {{catalogsName}} /</span>
+              <span class="catalogsName">{{catalogsName}}</span>
               <select
                 v-for="catalog,index in catalogs"
                 :key="catalog.ID"
                 ref="catalog"
-                v-model="Selected[index]"
                 @change="catalog_change(index)"
               >
                 <option value="-1">请选择</option>
@@ -236,8 +234,9 @@ select {
   color: #555;
   border: 1px solid #111;
   text-shadow: none;
+  margin-left: 10px;
   margin-right: 10px;
-  margin-bottom: 20px;
+  margin-bottom: 10px;
   border-radius: 1px;
   padding: 10px;
   transition: box-shadow 0.25s ease;
@@ -248,8 +247,12 @@ select {
 select:focus {
   outline: none;
 }
-.catalogsName{
-  font-size:16px;
-  color: #409eff;
+.catalogsName {
+  font-size: 16px;
+  color: #606266;
+  font-weight: 600;
+}
+.catalogsName + select {
+  display: none;
 }
 </style>

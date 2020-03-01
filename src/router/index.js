@@ -5,6 +5,7 @@ import Add_problem from '@/pages/add_problem'
 import Problem from '@/pages/problem'
 import Set from '@/pages/set'
 import Admin from '@/pages/admin'
+import Login from '@/pages/login'
 
 Vue.use(Router)
 
@@ -24,6 +25,11 @@ export default new Router({
       path: '/admin',
       name: 'admin',
       component: Admin
+    },
+    {
+      path: '/login',
+      name: 'login',
+      component: Login
     },
     {
       path: '/add_problem',

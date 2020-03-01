@@ -1,18 +1,22 @@
 <template>
   <el-container id="app">
-    <el-header>
-      <Header />
-    </el-header>
-    <el-container>
-      <el-aside width="200px">
-        <Aside />
-      </el-aside>
-      <el-main>
-        <!-- <Main /> -->
-        <router-view></router-view>
-      </el-main>
-    </el-container>
-    <el-footer>Footer</el-footer>
+    <div v-if="$route.path.split('/')[1]=='login'">
+      <Login />
+    </div>
+    <div v-if="$route.path.split('/')[1]!='login'" style="width:100%;">
+      <el-header>
+        <Header />
+      </el-header>
+      <el-container>
+        <el-aside width="200px">
+          <Aside />
+        </el-aside>
+        <el-main>
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+      <el-footer>Footer</el-footer>
+    </div>
   </el-container>
 </template>
 
@@ -20,15 +24,21 @@
 import Header from "@/components/header";
 import Aside from "@/components/aside";
 import Main from "@/components/main";
+import Login from "@/pages/login";
 
 export default {
   name: "App",
   components: {
     Header,
     Main,
-    Aside
+    Aside,
+    Login
   },
-  async created() {}
+  async created() {
+    this.$router.push("/login").catch(err => {
+      err;
+    });
+  }
 };
 </script>
 
